@@ -1,0 +1,53 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+
+  <app-title title="Carrinho" margin="1.5rem 0 0 2.5rem"></app-title>
+  <app-not-found
+  [visible]="!cart || !cart.items.length"
+  notFoundMessage="Seu carrinho está vazio"
+  resetLinkText="Voltar para a Home"></app-not-found>
+  <div *ngIf="cart && cart.items.length" class="container">
+    <ul>
+      <li *ngFor="let items of cart.items">
+        <div>
+          <img [src]="items.food.image" [alt]="items.food.name">
+        </div>
+        <div>
+          <a routerLink="/food/{{items.food.id}}">
+            {{items.food.name}}
+          </a>
+        </div>
+        <div class="quantity">
+          <button (click)="decreaseQuantity(items)">-</button>
+          <input type="text" [value]="items.quantity">
+          <button (click)="incrementQuantity(items)" [disabled]="getActiveAdd(items)">+</button>
+        </div>
+        <div>
+          {{ items.food.price | currency: 'BRL': 'symbol': '1.2-2' }}
+        </div>
+        <div>
+          <button class="remove-button" (click)="removeFromCart(items)">
+            Remove
+          </button>
+        </div>
+      </li>
+    </ul>
+    <div class="checkout">
+      <div>
+        <div class="foods-count">{{cart.totalCount}}</div>
+        <div class="total-price">{{cart.totalPrice | currency: 'BRL'}}</div>
+      </div>
+      <a routerLink="/checkout">Finalizar Compra</a>
+    </div>
+  </div>
+</body>
+</html>
